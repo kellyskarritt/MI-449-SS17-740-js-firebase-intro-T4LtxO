@@ -24,19 +24,21 @@ function createWoofInDatabase (woofs) {
 function readWoofsInDatabase () {
   firebase.database().ref('woofs')
     .on('child_added', function (addWoofRow) {
-      console.log('Key:', woofRow.key)
-      console.log('Created At:', woofRow.val().created_at)
-      console.log('Text:', woofRow.val().text)
+      console.log('Key:', addWoofRow.key)
+      console.log('Created At:', addWoofRow.val().created_at)
+      console.log('Text:', addWoofRow.val().text)
     })
+  firebase.database().ref('woofs')
     .on('child_changed', function (updateWoofRow) {
-      console.log('Key:', woofRow.key)
-      console.log('Created At:', woofRow.val().created_at)
-      console.log('Text:', woofRow.val().text)
+      console.log('Key:', updateWoofRow.key)
+      console.log('Created At:', updateWoofRow.val().created_at)
+      console.log('Text:', updateWoofRow.val().text)
     })
+  firebase.database().ref('woofs')
     .on('child_removed', function (deleteWoofRow) {
-      console.log('Key:', woofRow.key)
-      console.log('Created At:', woofRow.val().created_at)
-      console.log('Text:', woofRow.val().text)
+      console.log('Key:', deleteWoofRow.key)
+      console.log('Created At:', deleteWoofRow.val().created_at)
+      console.log('Text:', deleteWoofRow.val().text)
     })
 }
 

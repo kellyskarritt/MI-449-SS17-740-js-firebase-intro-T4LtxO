@@ -14,7 +14,7 @@ firebase.auth().signInAnonymously()
 // CREATE a new woof in Firebase
 function createWoofInDatabase (woofs) {
   firebase.database().ref('woofs').child('new woof').set({
-    created_at: '1491613778000',
+    created_at: '04/19/2017',
     text: 'That homework looks hard. Want me to eat it?'
   })
 }
@@ -23,31 +23,30 @@ function createWoofInDatabase (woofs) {
 // Call addWoofRow, updateWoofRow, and deleteWoofRow to update the page
 function readWoofsInDatabase () {
   firebase.database().ref('woofs')
-    .on('child_added', function (addWoofRow) {
-      console.log('Key:', addWoofRow.key)
-      console.log('Created At:', addWoofRow.val().created_at)
-      console.log('Text:', addWoofRow.val().text)
+    .on('child_added', function (addWoofSnapshot) {
+      addWoofRow(addWoofSnapshot.key, addWoofSnapshot.val())
+      addWoofRow(addWoofSnapshot.created_at, addWoofSnapshot.val())
+      addWoofRow(addWoofSnapshot.text, addWoofSnapshot.val())
     })
   firebase.database().ref('woofs')
-    .on('child_changed', function (updateWoofRow) {
-      console.log('Key:', updateWoofRow.key)
-      console.log('Created At:', updateWoofRow.val().created_at)
-      console.log('Text:', updateWoofRow.val().text)
+    .on('child_changed', function (updateWoofSnapshot) {
+      updateWoofRow(updateWoofSnapshot.key, updateWoofSnapshot.val())
+      updateWoofRow(updateWoofSnapshot.created_at, updateWoofSnapshot.val())
+      updateWoofRow(updateWoofSnapshot.text, updateWoofSnapshot.val())
     })
   firebase.database().ref('woofs')
-    .on('child_removed', function (deleteWoofRow) {
-      console.log('Key:', deleteWoofRow.key)
-      console.log('Created At:', deleteWoofRow.val().created_at)
-      console.log('Text:', deleteWoofRow.val().text)
+    .on('child_removed', function (deleteWoofSnapshot) {
+      deleteWoofRow(deleteWoofSnapshot.key, deleteWoofSnapshot.val())
+      deleteWoofRow(deleteWoofSnapshot.created_at, deleteWoofSnapshot.val())
+      deleteWoofRow(deleteWoofSnapshot.text, deleteWoofSnapshot.val())
     })
 }
 
 // UPDATE the woof in Firebase
 function updateWoofInDatabase (woofKey, woofText) {
-  firebase.database().ref('woofs').child('new woof').set({
-    created_at: '1491613778000',
-    text: 'That homework looks hard. Want me to eat it? THIS IS NEW'
-  })
+  firebase.database().ref('woofs').child('new woof/text').set(
+    'That homework looks hard. Want me to eat it? THIS IS UPDTED'
+  )
 }
 
 // DELETE the woof from Firebase

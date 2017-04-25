@@ -27,29 +27,22 @@ function readWoofsInDatabase () {
   firebase.database().ref('woofs')
     .on('child_added', function (addWoofSnapshot) {
       addWoofRow(addWoofSnapshot.key, addWoofSnapshot.val())
-      addWoofRow(addWoofSnapshot.created_at)
-      addWoofRow(addWoofSnapshot.text)
     })
   firebase.database().ref('woofs')
     .on('child_changed', function (updateWoofSnapshot) {
       updateWoofRow(updateWoofSnapshot.key, updateWoofSnapshot.val())
-      updateWoofRow(updateWoofSnapshot.created_at)
-      updateWoofRow(updateWoofSnapshot.text)
     })
   firebase.database().ref('woofs')
     .on('child_removed', function (deleteWoofSnapshot) {
       deleteWoofRow(deleteWoofSnapshot.key, deleteWoofSnapshot.val())
-      deleteWoofRow(deleteWoofSnapshot.created_at)
-      deleteWoofRow(deleteWoofSnapshot.text)
     })
 }
 
 // UPDATE the woof in Firebase
 function updateWoofInDatabase (woofKey, woofText) {
-  firebase.database().ref('woofs/' + woofKey).set({
-    created_at: nowDate,
-    text: woofText
-  })
+  firebase.database().ref('woofs/' + woofKey + '/text').set(
+    woofText
+  )
 }
 
 // DELETE the woof from Firebase

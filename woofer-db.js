@@ -8,14 +8,16 @@ var config = {
   messagingSenderId: '376737576954'
 }
 firebase.initializeApp(config)
-
 firebase.auth().signInAnonymously()
 
+var nowDate = new Date().getTime()
+
 // CREATE a new woof in Firebase
-function createWoofInDatabase (woofs) {
-  firebase.database().ref('woofs').child('new woof').set({
-    created_at: '04/19/2017',
-    text: 'That homework looks hard. Want me to eat it?'
+function createWoofInDatabase (woof) {
+  var newWoof = document.getElementById('woof-text').value
+  firebase.database().ref('woofs').push({
+    created_at: nowDate,
+    text: newWoof
   })
 }
 
@@ -25,33 +27,34 @@ function readWoofsInDatabase () {
   firebase.database().ref('woofs')
     .on('child_added', function (addWoofSnapshot) {
       addWoofRow(addWoofSnapshot.key, addWoofSnapshot.val())
-      addWoofRow(addWoofSnapshot.created_at, addWoofSnapshot.val())
-      addWoofRow(addWoofSnapshot.text, addWoofSnapshot.val())
+      addWoofRow(addWoofSnapshot.created_at)
+      addWoofRow(addWoofSnapshot.text)
     })
   firebase.database().ref('woofs')
     .on('child_changed', function (updateWoofSnapshot) {
       updateWoofRow(updateWoofSnapshot.key, updateWoofSnapshot.val())
-      updateWoofRow(updateWoofSnapshot.created_at, updateWoofSnapshot.val())
-      updateWoofRow(updateWoofSnapshot.text, updateWoofSnapshot.val())
+      updateWoofRow(updateWoofSnapshot.created_at)
+      updateWoofRow(updateWoofSnapshot.text)
     })
   firebase.database().ref('woofs')
     .on('child_removed', function (deleteWoofSnapshot) {
       deleteWoofRow(deleteWoofSnapshot.key, deleteWoofSnapshot.val())
-      deleteWoofRow(deleteWoofSnapshot.created_at, deleteWoofSnapshot.val())
-      deleteWoofRow(deleteWoofSnapshot.text, deleteWoofSnapshot.val())
+      deleteWoofRow(deleteWoofSnapshot.created_at)
+      deleteWoofRow(deleteWoofSnapshot.text)
     })
 }
 
 // UPDATE the woof in Firebase
 function updateWoofInDatabase (woofKey, woofText) {
-  firebase.database().ref('woofs').child('new woof/text').set(
-    'That homework looks hard. Want me to eat it? THIS IS UPDTED'
-  )
+  firebase.database().ref('woofs/' + woofKey).set({
+    created_at: nowDate,
+    text: woofText
+  })
 }
 
 // DELETE the woof from Firebase
 function deleteWoofFromDatabase (woofKey) {
-  firebase.database().ref('woofs/new woof').remove()
+  firebase.database().ref('woofs/' + woofKey).remove()
 }
 
 // Load all of the data
